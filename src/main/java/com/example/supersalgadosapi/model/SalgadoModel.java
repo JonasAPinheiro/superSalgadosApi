@@ -2,26 +2,27 @@ package com.example.supersalgadosapi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "clientes")
-public class Cliente {
+@Table(name = "salgados")
+public class SalgadoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    private String sabor;
 
     @Column(nullable = false)
-    private String senha;
+    private BigDecimal preco;
 
     @Column(nullable = false)
-    private Double saldo = 0.0;
+    private Integer quantidadeEstoque;
 }

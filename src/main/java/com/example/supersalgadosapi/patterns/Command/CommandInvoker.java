@@ -1,4 +1,4 @@
-package com.example.supersalgadosapi.patterns;
+package com.example.supersalgadosapi.patterns.Command;
 
 import com.example.supersalgadosapi.model.PedidoModel;
 import com.example.supersalgadosapi.repository.*;

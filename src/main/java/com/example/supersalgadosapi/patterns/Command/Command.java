@@ -1,4 +1,4 @@
-package com.example.supersalgadosapi.patterns;
+package com.example.supersalgadosapi.patterns.Command;
 
 public interface Command {
     void executar();

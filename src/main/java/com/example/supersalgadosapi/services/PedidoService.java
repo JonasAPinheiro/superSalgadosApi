@@ -7,8 +7,8 @@ import com.example.supersalgadosapi.model.ClienteModel;
 import com.example.supersalgadosapi.model.ItemPedidoModel;
 import com.example.supersalgadosapi.model.PedidoModel;
 import com.example.supersalgadosapi.model.SalgadoModel;
-import com.example.supersalgadosapi.patterns.CommandInvoker;
-import com.example.supersalgadosapi.patterns.FazerPedidoCommand;
+import com.example.supersalgadosapi.patterns.Command.CommandInvoker;
+import com.example.supersalgadosapi.patterns.Command.FazerPedidoCommand;
 import com.example.supersalgadosapi.repository.*;
 import org.springframework.stereotype.Service;
 

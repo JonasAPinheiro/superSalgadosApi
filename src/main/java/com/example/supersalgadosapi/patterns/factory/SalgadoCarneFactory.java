@@ -1,9 +1,11 @@
 package com.example.supersalgadosapi.patterns.factory;
 
 import com.example.supersalgadosapi.model.SalgadoModel;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class SalgadoCarneFactory implements SalgadoFactory{
     @Override
     public SalgadoModel criar(Integer quantidade) {

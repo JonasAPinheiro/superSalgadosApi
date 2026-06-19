@@ -7,8 +7,10 @@ import com.example.supersalgadosapi.model.ClienteModel;
 import com.example.supersalgadosapi.model.ItemPedidoModel;
 import com.example.supersalgadosapi.model.PedidoModel;
 import com.example.supersalgadosapi.model.SalgadoModel;
-import com.example.supersalgadosapi.patterns.Command.CommandInvoker;
-import com.example.supersalgadosapi.patterns.Command.FazerPedidoCommand;
+import com.example.supersalgadosapi.patterns.command.CommandInvoker;
+import com.example.supersalgadosapi.patterns.command.FazerPedidoCommand;
+import com.example.supersalgadosapi.patterns.strategy.PrecoContext;
+import com.example.supersalgadosapi.patterns.strategy.PrecoStrategy;
 import com.example.supersalgadosapi.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class PedidoService {
     private final MovimentoEstoqueRepository movimentoEstoqueRepository;
     private final MovimentoFinanceiroRepository movimentoFinanceiroRepository;
     private final CommandInvoker commandInvoker;
+    private final PrecoContext precoContext;
 
     public PedidoService(
             ClienteRepository clienteRepository,
@@ -33,7 +36,8 @@ public class PedidoService {
             ItemPedidoRepository itemPedidoRepository,
             MovimentoEstoqueRepository movimentoEstoqueRepository,
             MovimentoFinanceiroRepository movimentoFinanceiroRepository,
-            CommandInvoker commandInvoker
+            CommandInvoker commandInvoker,
+            PrecoContext precoContext
     ) {
         this.clienteRepository = clienteRepository;
         this.salgadoRepository = salgadoRepository;
@@ -42,6 +46,7 @@ public class PedidoService {
         this.movimentoEstoqueRepository = movimentoEstoqueRepository;
         this.movimentoFinanceiroRepository = movimentoFinanceiroRepository;
         this.commandInvoker = commandInvoker;
+        this.precoContext = precoContext;
     }
 
     public PedidoResponseDTO criarPedido(PedidoRequestDTO dto) {
@@ -64,7 +69,11 @@ public class PedidoService {
             item.setPedido(pedido);
             item.setSalgado(salgado);
             item.setQuantidade(itemDTO.getQuantidade());
-            item.setSubtotal(salgado.getPreco().multiply(BigDecimal.valueOf(itemDTO.getQuantidade())));
+
+            PrecoStrategy strategy = precoContext.escolher(itemDTO.getQuantidade());
+            BigDecimal subtotal = strategy.calcular(salgado, itemDTO.getQuantidade());
+            item.setSubtotal(subtotal);
+
             itens.add(item);
         }
 

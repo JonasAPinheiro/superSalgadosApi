@@ -1,16 +1,17 @@
-package com.example.supersalgadosapi.patterns.Factory;
+package com.example.supersalgadosapi.patterns.factory;
 
 import com.example.supersalgadosapi.model.SalgadoModel;
 
 import java.math.BigDecimal;
 
-public class SalgadoCarneFactory implements SalgadoFactory{
+public class SalgadoFrangoFactory implements SalgadoFactory{
+
     @Override
     public SalgadoModel criar(Integer quantidade) {
         SalgadoModel salgado = new SalgadoModel();
-        salgado.setSabor("Carne");
+        salgado.setSabor("Frango");
         salgado.setQuantidadeEstoque(quantidade);
-        salgado.setPreco(new BigDecimal("5.00"));
+        salgado.setPreco(new BigDecimal("8.00"));
         return salgado;
     }
 }

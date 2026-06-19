@@ -2,7 +2,7 @@ package com.example.supersalgadosapi.services;
 
 import com.example.supersalgadosapi.model.SalgadoModel;
 import com.example.supersalgadosapi.repository.SalgadoRepository;
-import com.example.supersalgadosapi.patterns.Factory.SalgadoFactoryProvider;
+import com.example.supersalgadosapi.patterns.factory.SalgadoFactoryProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

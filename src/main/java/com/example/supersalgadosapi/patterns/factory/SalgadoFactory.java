@@ -1,4 +1,4 @@
-package com.example.supersalgadosapi.patterns.Factory;
+package com.example.supersalgadosapi.patterns.factory;
 
 import com.example.supersalgadosapi.model.SalgadoModel;
 

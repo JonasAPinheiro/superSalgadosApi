@@ -1,8 +1,6 @@
-package com.example.supersalgadosapi.patterns.Factory;
+package com.example.supersalgadosapi.patterns.factory;
 
 import com.example.supersalgadosapi.model.SalgadoModel;
-import com.example.supersalgadosapi.patterns.Factory.SalgadoCarneFactory;
-import com.example.supersalgadosapi.patterns.Factory.SalgadoFrangoFactory;
 import org.springframework.stereotype.Component;
 
 @Component

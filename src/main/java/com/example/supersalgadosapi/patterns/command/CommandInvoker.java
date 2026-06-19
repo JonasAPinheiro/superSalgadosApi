@@ -2,6 +2,7 @@ package com.example.supersalgadosapi.patterns.command;
 
 import com.example.supersalgadosapi.model.PedidoModel;
 import com.example.supersalgadosapi.patterns.observer.EstoqueSubject;
+import com.example.supersalgadosapi.patterns.state.PedidoContext;
 import com.example.supersalgadosapi.repository.*;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +39,8 @@ public class CommandInvoker {
         PedidoModel pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        if (pedido.getStatus().equals("estornado")) {
-            throw new RuntimeException("Pedido já foi estornado");
-        }
+        PedidoContext context = new PedidoContext(pedido.getStatus());
+        context.estornar();
 
         FazerPedidoCommand command = new FazerPedidoCommand(
                 pedido,

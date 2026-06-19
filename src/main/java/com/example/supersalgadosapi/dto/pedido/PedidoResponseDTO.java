@@ -14,4 +14,5 @@ public class PedidoResponseDTO {
     private LocalDateTime dataHora;
     private BigDecimal total;
     private List<ItemPedidoResponseDTO> itens;
+    private List<String> alertasEstoque;
 }

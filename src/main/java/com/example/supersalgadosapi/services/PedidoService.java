@@ -9,6 +9,7 @@ import com.example.supersalgadosapi.model.PedidoModel;
 import com.example.supersalgadosapi.model.SalgadoModel;
 import com.example.supersalgadosapi.patterns.command.CommandInvoker;
 import com.example.supersalgadosapi.patterns.command.FazerPedidoCommand;
+import com.example.supersalgadosapi.patterns.observer.EstoqueSubject;
 import com.example.supersalgadosapi.patterns.strategy.PrecoContext;
 import com.example.supersalgadosapi.patterns.strategy.PrecoStrategy;
 import com.example.supersalgadosapi.repository.*;
@@ -28,6 +29,7 @@ public class PedidoService {
     private final MovimentoFinanceiroRepository movimentoFinanceiroRepository;
     private final CommandInvoker commandInvoker;
     private final PrecoContext precoContext;
+    private final EstoqueSubject estoqueSubject;
 
     public PedidoService(
             ClienteRepository clienteRepository,
@@ -37,7 +39,8 @@ public class PedidoService {
             MovimentoEstoqueRepository movimentoEstoqueRepository,
             MovimentoFinanceiroRepository movimentoFinanceiroRepository,
             CommandInvoker commandInvoker,
-            PrecoContext precoContext
+            PrecoContext precoContext,
+            EstoqueSubject estoqueSubject
     ) {
         this.clienteRepository = clienteRepository;
         this.salgadoRepository = salgadoRepository;
@@ -47,6 +50,7 @@ public class PedidoService {
         this.movimentoFinanceiroRepository = movimentoFinanceiroRepository;
         this.commandInvoker = commandInvoker;
         this.precoContext = precoContext;
+        this.estoqueSubject = estoqueSubject;
     }
 
     public PedidoResponseDTO criarPedido(PedidoRequestDTO dto) {
@@ -93,12 +97,15 @@ public class PedidoService {
                 movimentoEstoqueRepository,
                 movimentoFinanceiroRepository,
                 clienteRepository,
-                salgadoRepository
+                salgadoRepository,
+                estoqueSubject
         );
 
         commandInvoker.executar(pedido.getId(), command);
 
-        return montarResponse(pedido, total);
+        PedidoResponseDTO response = montarResponse(pedido, total);
+        response.setAlertasEstoque(command.getAlertasEstoque());
+        return response;
     }
 
     public void estornarPedido(Long pedidoId) {

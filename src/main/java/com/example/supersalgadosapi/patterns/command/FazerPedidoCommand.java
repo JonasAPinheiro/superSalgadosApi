@@ -1,10 +1,14 @@
 package com.example.supersalgadosapi.patterns.command;
 
 import com.example.supersalgadosapi.model.*;
+import com.example.supersalgadosapi.patterns.observer.EstoqueSubject;
 import com.example.supersalgadosapi.repository.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FazerPedidoCommand implements Command{
     private final PedidoModel pedido;
@@ -13,6 +17,10 @@ public class FazerPedidoCommand implements Command{
     private final MovimentoFinanceiroRepository movimentoFinanceiroRepository;
     private final ClienteRepository clienteRepository;
     private final SalgadoRepository salgadoRepository;
+    private final EstoqueSubject estoqueSubject;
+
+    @Getter
+    private final List<String> alertasEstoque = new ArrayList<>();
 
     public FazerPedidoCommand(
             PedidoModel pedido,
@@ -20,7 +28,8 @@ public class FazerPedidoCommand implements Command{
             MovimentoEstoqueRepository movimentoEstoqueRepository,
             MovimentoFinanceiroRepository movimentoFinanceiroRepository,
             ClienteRepository clienteRepository,
-            SalgadoRepository salgadoRepository
+            SalgadoRepository salgadoRepository,
+            EstoqueSubject estoqueSubject
     ) {
         this.pedido = pedido;
         this.pedidoRepository = pedidoRepository;
@@ -28,6 +37,7 @@ public class FazerPedidoCommand implements Command{
         this.movimentoFinanceiroRepository = movimentoFinanceiroRepository;
         this.clienteRepository = clienteRepository;
         this.salgadoRepository = salgadoRepository;
+        this.estoqueSubject = estoqueSubject;
     }
 
     @Override
@@ -47,6 +57,9 @@ public class FazerPedidoCommand implements Command{
             SalgadoModel salgado = item.getSalgado();
             salgado.setQuantidadeEstoque(salgado.getQuantidadeEstoque() - item.getQuantidade());
             salgadoRepository.save(salgado);
+
+            List<String> alertas = estoqueSubject.notificarTodos(salgado);
+            alertasEstoque.addAll(alertas);
         }
 
         BigDecimal total = pedido.getItens().stream()
